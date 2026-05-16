@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
+from aiogram.exceptions import TelegramBadRequest
 
 from backend.config import BOT_TOKEN
 from bot.downloader import download_file
@@ -77,6 +78,11 @@ async def handle_video(message: Message):
 async def handle_publish_decision(call: CallbackQuery):
     user_id = call.from_user.id
     action = call.data.split(":", maxsplit=1)[1]
+
+    try:
+        await call.message.delete()
+    except TelegramBadRequest:
+        pass
 
     if action == "confirm" and user_id in USER_DRAFTS:
         await call.message.answer(

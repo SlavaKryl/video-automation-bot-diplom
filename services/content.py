@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 
 
@@ -11,8 +12,20 @@ class ContentPack:
     rutube_caption: str
 
 
+def _normalize_transcription(transcription: str) -> str:
+    text = transcription.strip()
+    text = re.sub(r"\s+", " ", text)
+    # readability for cases like "1,2,3,1,2,3"
+    text = re.sub(r",(?=\S)", ", ", text)
+    return text
+
+
 def build_content_pack(transcription: str) -> ContentPack:
-    short = " ".join(transcription.split())
+    short = _normalize_transcription(transcription)
+
+    if not short:
+        short = "(Не удалось распознать текст. Нужна ручная правка черновика.)"
+
     teaser = short[:280] + ("..." if len(short) > 280 else "")
 
     hook = "🎬 Новый фрагмент из видео"
