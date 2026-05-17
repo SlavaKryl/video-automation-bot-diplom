@@ -93,6 +93,27 @@ docker compose exec -T odoo odoo -d odoo -i video_automation --stop-after-init
 Если видите ошибку `KeyError: 'ir.http'` в контейнере Odoo, обычно это означает, что база не была инициализирована.
 Скрипт `./scripts/test_odoo_integration.sh` теперь выполняет инициализацию БД (`base`) и установку `video_automation` автоматически.
 
+
+### Что смотреть в логах, если `make dev-all` падает
+
+Собрать ключевые логи одной командой:
+
+```bash
+docker compose ps
+docker compose logs --tail=200 db odoo
+```
+
+Если ошибка вида `relation "ir_module_module" does not exist`, это признак неинициализированной БД Odoo.
+
+Исправление:
+
+```bash
+docker compose down -v
+make odoo-up
+```
+
+Команда `make odoo-up` теперь сначала инициализирует БД через one-shot запуск Odoo (`-i base,video_automation`), и только потом поднимает web-сервис.
+
 ## Минимальная архитектура (эволюционно)
 
 - `bot/` — Telegram-интерфейс и сценарий диалога.
