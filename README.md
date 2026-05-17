@@ -56,6 +56,24 @@ export ODOO_PASSWORD=admin
 
 При включенной интеграции бот будет создавать `video.job` в Odoo после формирования черновика.
 
+### Локальный Odoo для интеграции
+
+```bash
+docker compose up -d db odoo
+# Установка модуля с моделью video.job
+docker compose exec -T odoo odoo -d odoo -i video_automation --stop-after-init
+```
+
+Структура модуля: `odoo/addons/video_automation` (модель `video.job` + права доступа).
+
+### Smoke-тест интеграции Odoo
+
+```bash
+./scripts/test_odoo_integration.sh
+```
+
+Если в вашей локальной Odoo пароль администратора отличается от `admin`, обновите `ODOO_PASSWORD` в окружении и в скрипте smoke-теста.
+
 ## Минимальная архитектура (эволюционно)
 
 - `bot/` — Telegram-интерфейс и сценарий диалога.
