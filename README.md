@@ -49,7 +49,7 @@ python -m bot.main
 ```bash
 export ODOO_ENABLED=true
 export ODOO_URL=http://localhost:8069
-export ODOO_DB=odoo_db
+export ODOO_DB=odoo
 export ODOO_USERNAME=admin
 export ODOO_PASSWORD=admin
 ```
@@ -72,7 +72,10 @@ docker compose exec -T odoo odoo -d odoo -i video_automation --stop-after-init
 ./scripts/test_odoo_integration.sh
 ```
 
-Если в вашей локальной Odoo пароль администратора отличается от `admin`, обновите `ODOO_PASSWORD` в окружении и в скрипте smoke-теста.
+Если в вашей локальной Odoo пароль администратора отличается от `admin`, передайте `ODOO_PASSWORD` через переменные окружения при запуске скрипта.
+
+Если видите ошибку `KeyError: 'ir.http'` в контейнере Odoo, обычно это означает, что база не была инициализирована.
+Скрипт `./scripts/test_odoo_integration.sh` теперь выполняет инициализацию БД (`base`) и установку `video_automation` автоматически.
 
 ## Минимальная архитектура (эволюционно)
 
