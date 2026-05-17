@@ -8,6 +8,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, C
 from aiogram.exceptions import TelegramBadRequest
 
 from backend.config import BOT_TOKEN
+from backend.odoo_client import OdooVideoDraft, odoo_client
 from bot.downloader import download_file
 from services.audio import extract_audio, trim_silence
 from services.content import build_content_pack
@@ -54,6 +55,14 @@ async def handle_video(message: Message):
         f"📣 Черновик поста VK:\n{content_pack.vk_post[:500]}"
     )
 
+    job_id = odoo_client.create_video_job(
+        OdooVideoDraft(
+            telegram_user_id=message.from_user.id,
+            transcription=text,
+            preview=preview,
+        )
+    )
+
     USER_DRAFTS[message.from_user.id] = DraftState(
         transcription=text,
         content_preview=preview,
@@ -67,6 +76,8 @@ async def handle_video(message: Message):
     )
 
     await message.answer(preview)
+    if job_id:
+        await message.answer(f"🧾 Черновик синхронизирован с Odoo (video.job #{job_id}).")
     await message.answer(
         "Проверить черновик и подтвердить публикацию в выбранные каналы?\n"
         "(Сейчас это MVP-заглушка, публикация эмулируется)",

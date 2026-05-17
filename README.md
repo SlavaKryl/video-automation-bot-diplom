@@ -44,6 +44,18 @@ pip install -r requirements.txt
 python -m bot.main
 ```
 
+### Переменные окружения (Odoo)
+
+```bash
+export ODOO_ENABLED=true
+export ODOO_URL=http://localhost:8069
+export ODOO_DB=odoo_db
+export ODOO_USERNAME=admin
+export ODOO_PASSWORD=admin
+```
+
+При включенной интеграции бот будет создавать `video.job` в Odoo после формирования черновика.
+
 ## Минимальная архитектура (эволюционно)
 
 - `bot/` — Telegram-интерфейс и сценарий диалога.
