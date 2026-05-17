@@ -58,6 +58,22 @@ export ODOO_PASSWORD=admin
 
 ### Локальный Odoo для интеграции
 
+### Запуск одной командой
+
+Поднять Odoo + Postgres, дождаться готовности, инициализировать БД и установить модуль:
+
+```bash
+make odoo-up
+```
+
+Поднять всё (Odoo + backend + bot) одной командой:
+
+```bash
+BOT_TOKEN=your_token make dev-all
+```
+
+> `make dev-all` запускает backend и bot в текущем окружении Python после успешной подготовки Odoo.
+
 ```bash
 docker compose up -d db odoo
 # Установка модуля с моделью video.job
