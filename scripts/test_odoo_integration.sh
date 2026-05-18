@@ -13,10 +13,10 @@ export ODOO_URL ODOO_DB ODOO_USERNAME ODOO_PASSWORD
 echo "[1/7] Starting Postgres..."
 docker compose up -d db
 
-echo "[2/7] Initializing DB and installing modules (base, video_automation)..."
+echo "[2/7] Initializing DB and installing modules (base, web, video_automation)..."
 # Run one-shot Odoo init before starting long-running Odoo web service.
 # This prevents the 'relation ir_module_module does not exist' loop on fresh DBs.
-docker compose run --rm odoo odoo -d "$ODOO_DB" -i base,video_automation --without-demo=all --stop-after-init
+docker compose run --rm odoo odoo -d "$ODOO_DB" -i base,web,video_automation --without-demo=all --stop-after-init
 
 echo "[3/7] Starting Odoo web service..."
 docker compose up -d odoo
