@@ -4,7 +4,7 @@
         <field name="name">video.job.tree</field>
         <field name="model">video.job</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="source"/>
                 <field name="state"/>
@@ -12,7 +12,7 @@
                 <field name="max_retries"/>
                 <field name="approved_by_id"/>
                 <field name="create_date"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -51,23 +51,23 @@
                         </page>
                         <page string="Assets">
                             <field name="asset_ids">
-                                <list editable="bottom">
+                                <tree editable="bottom">
                                     <field name="name"/>
                                     <field name="asset_type"/>
                                     <field name="storage_uri"/>
                                     <field name="state"/>
                                     <field name="error_message"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                         <page string="Publications">
                             <field name="publication_ids">
-                                <list editable="bottom">
+                                <tree editable="bottom">
                                     <field name="platform"/>
                                     <field name="state"/>
                                     <field name="external_id"/>
                                     <field name="last_error"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                     </notebook>
@@ -80,13 +80,13 @@
         <field name="name">video.asset.tree</field>
         <field name="model">video.asset</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="job_id"/>
                 <field name="asset_type"/>
                 <field name="state"/>
                 <field name="storage_uri"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -94,32 +94,32 @@
         <field name="name">video.publication.tree</field>
         <field name="model">video.publication</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="job_id"/>
                 <field name="platform"/>
                 <field name="state"/>
                 <field name="external_id"/>
                 <field name="last_error"/>
-            </list>
+            </tree>
         </field>
     </record>
 
     <record id="action_video_job" model="ir.actions.act_window">
         <field name="name">Video Jobs</field>
         <field name="res_model">video.job</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
     <record id="action_video_asset" model="ir.actions.act_window">
         <field name="name">Video Assets</field>
         <field name="res_model">video.asset</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">tree</field>
     </record>
 
     <record id="action_video_publication" model="ir.actions.act_window">
         <field name="name">Video Publications</field>
         <field name="res_model">video.publication</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">tree</field>
     </record>
 
     <menuitem id="menu_video_automation_root" name="Video Automation" sequence="30"/>
