@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_video_job_user,access.video.job.user,model_video_job,base.group_user,1,1,1,1
+access_video_asset_user,access.video.asset.user,model_video_asset,base.group_user,1,1,1,1
+access_video_publication_user,access.video.publication.user,model_video_publication,base.group_user,1,1,1,1

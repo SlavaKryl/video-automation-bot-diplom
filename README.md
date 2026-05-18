@@ -91,7 +91,7 @@ docker compose exec -T odoo odoo -d odoo -i video_automation --stop-after-init
 Если в вашей локальной Odoo пароль администратора отличается от `admin`, передайте `ODOO_PASSWORD` через переменные окружения при запуске скрипта.
 
 Если видите ошибку `KeyError: 'ir.http'` в контейнере Odoo, обычно это означает, что база не была инициализирована.
-Скрипт `./scripts/test_odoo_integration.sh` теперь выполняет инициализацию БД (`base`) и установку `video_automation` автоматически.
+Скрипт `./scripts/test_odoo_integration.sh` теперь выполняет инициализацию БД (модули `base, web`) и установку `video_automation` автоматически.
 
 
 ### Что смотреть в логах, если `make dev-all` падает
@@ -112,7 +112,7 @@ docker compose down -v
 make odoo-up
 ```
 
-Команда `make odoo-up` теперь сначала инициализирует БД через one-shot запуск Odoo (`-i base,video_automation`), и только потом поднимает web-сервис.
+Команда `make odoo-up` теперь сначала инициализирует БД через one-shot запуск Odoo (`-i base,web,video_automation`), и только потом поднимает web-сервис.
 
 ## Минимальная архитектура (эволюционно)
 
