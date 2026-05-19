@@ -115,15 +115,14 @@ async def handle_publish_decision(call: CallbackQuery):
     user_id = call.from_user.id
     action = call.data.split(":", maxsplit=1)[1]
 
-    try:
-        await call.message.delete()
-    except TelegramBadRequest:
-        pass
-
     if action in {"vk", "telegram", "dzen"} and user_id in USER_DRAFTS:
         USER_DRAFTS[user_id].release_target = action
-        await call.message.answer(f"Площадка выбрана: {action.upper()}. Нажмите «Опубликовать в выбранное» для подтверждения.")
+        await call.message.answer(f"Площадка выбрана: {action.upper()}. Теперь нажмите «Опубликовать в выбранное» в этом же сообщении.")
     elif action == "confirm" and user_id in USER_DRAFTS:
+        try:
+            await call.message.delete()
+        except TelegramBadRequest:
+            pass
         target = USER_DRAFTS[user_id].release_target or "VK"
         await call.message.answer(
             "🚀 Публикация запущена (MVP-режим):\n"
@@ -131,6 +130,10 @@ async def handle_publish_decision(call: CallbackQuery):
             "Следующий шаг: подключить реальные API площадок и Odoo job queue."
         )
     else:
+        try:
+            await call.message.delete()
+        except TelegramBadRequest:
+            pass
         await call.message.answer("Ок, публикация отменена.")
 
     await call.answer()
