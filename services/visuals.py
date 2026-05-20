@@ -1,9 +1,13 @@
 import base64
+import logging
 import os
 import tempfile
 from typing import Optional
 
 import aiohttp
+
+
+logger = logging.getLogger(__name__)
 
 
 async def extract_main_idea(text: str) -> str:
@@ -70,5 +74,6 @@ async def generate_image_by_text(main_idea: str) -> Optional[str]:
                 with open(path, "wb") as f:
                     f.write(raw)
                 return path
-    except Exception:
+    except Exception as exc:
+        logger.exception("Ошибка генерации изображения через SD API: %s", exc)
         return None
