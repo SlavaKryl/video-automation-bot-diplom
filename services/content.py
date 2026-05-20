@@ -63,7 +63,7 @@ async def build_content_pack(transcription: str) -> ContentPack:
     teaser = short[:280] + ("..." if len(short) > 280 else "")
     refined_teaser = await _rewrite_with_ollama(teaser)
 
-    hook = "🎬 Новый фрагмент из видео"
+    hook = "Новый фрагмент из видео"
     hashtags = "#видео #контент #автоматизация"
     description = f"Короткий разбор: {teaser}"
     title = short[:70] if short else "Новый видеофрагмент"
