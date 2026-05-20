@@ -161,6 +161,15 @@ async def handle_edit(call: CallbackQuery):
 
 @dp.callback_query(lambda c: c.data == "release:start")
 async def handle_release_start(call: CallbackQuery):
+    state = USER_DRAFTS.get(call.from_user.id)
+    if state:
+        state.edit_field = None
+
+    try:
+        await call.message.delete()
+    except TelegramBadRequest:
+        pass
+
     kb = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="VK", callback_data="publish:vk")],
