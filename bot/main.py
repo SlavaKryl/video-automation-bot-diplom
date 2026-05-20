@@ -41,10 +41,10 @@ USER_DRAFTS: dict[int, DraftState] = {}
 
 def _build_draft_message(state: DraftState) -> str:
     return (
-        f"📝 Транскрипт (фрагмент):\n{state.transcription[:700]}\n\n"
-        f"📣 Текст поста VK:\n{state.vk_post}\n\n"
-        f"🏷 Заголовок:\n{state.title}\n\n"
-        f"📄 Описание:\n{state.description}\n\n"
+        f"Транскрипт (фрагмент):\n{state.transcription[:700]}\n\n"
+        f"Текст поста VK:\n{state.vk_post}\n\n"
+        f"Заголовок:\n{state.title}\n\n"
+        f"Описание:\n{state.description}\n\n"
         f"#️⃣ Хэштеги:\n{state.hashtags}"
     )
 
@@ -52,30 +52,30 @@ def _build_draft_message(state: DraftState) -> str:
 def _build_edit_kb() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="✏️ Изменить текст VK", callback_data="edit:vk_post")],
-            [InlineKeyboardButton(text="✏️ Изменить заголовок", callback_data="edit:title")],
-            [InlineKeyboardButton(text="✏️ Изменить описание", callback_data="edit:description")],
-            [InlineKeyboardButton(text="✏️ Изменить хэштеги", callback_data="edit:hashtags")],
-            [InlineKeyboardButton(text="🚀 Релиз", callback_data="release:start")],
-            [InlineKeyboardButton(text="❌ Отменить", callback_data="publish:cancel")],
+            [InlineKeyboardButton(text="Изменить текст VK", callback_data="edit:vk_post")],
+            [InlineKeyboardButton(text="Изменить заголовок", callback_data="edit:title")],
+            [InlineKeyboardButton(text="Изменить описание", callback_data="edit:description")],
+            [InlineKeyboardButton(text="Изменить хэштеги", callback_data="edit:hashtags")],
+            [InlineKeyboardButton(text="Релиз", callback_data="release:start")],
+            [InlineKeyboardButton(text="Отменить", callback_data="publish:cancel")],
         ]
     )
 
 
 @dp.message(lambda message: message.video is not None)
 async def handle_video(message: Message):
-    await message.answer("📥 Скачиваю видео...")
+    await message.answer("Скачиваю видео...")
 
     file = await bot.get_file(message.video.file_id)
     path = file.file_path
 
     await download_file(path, VIDEO_PATH)
 
-    await message.answer("🎧 Извлекаю аудио и очищаю паузы...")
+    await message.answer("Извлекаю аудио и очищаю паузы...")
     extract_audio(VIDEO_PATH, RAW_AUDIO_PATH)
     trim_silence(RAW_AUDIO_PATH, TRIMMED_AUDIO_PATH)
 
-    await message.answer("🧠 Транскрибирую...")
+    await message.answer("Транскрибирую...")
     text = transcribe(TRIMMED_AUDIO_PATH)
 
     content_pack = await build_content_pack(text)
@@ -103,7 +103,7 @@ async def handle_video(message: Message):
 
     await message.answer(preview)
     if job_id:
-        await message.answer(f"🧾 Черновик синхронизирован с Odoo (video.job #{job_id}).")
+        await message.answer(f"Черновик синхронизирован с Odoo (video.job #{job_id}).")
     await message.answer(
         "Выберите действие: отредактировать элементы поста или перейти к релизу.",
         reply_markup=_build_edit_kb(),
@@ -125,7 +125,7 @@ async def handle_publish_decision(call: CallbackQuery):
             pass
         target = USER_DRAFTS[user_id].release_target or "VK"
         await call.message.answer(
-            "🚀 Публикация запущена (MVP-режим):\n"
+            "Публикация запущена (MVP-режим):\n"
             f"• {target} пост\n\n"
             "Следующий шаг: подключить реальные API площадок и Odoo job queue."
         )
@@ -175,7 +175,7 @@ async def handle_release_start(call: CallbackQuery):
             [InlineKeyboardButton(text="VK", callback_data="publish:vk")],
             [InlineKeyboardButton(text="Telegram", callback_data="publish:telegram")],
             [InlineKeyboardButton(text="Дзен", callback_data="publish:dzen")],
-            [InlineKeyboardButton(text="✅ Опубликовать в выбранное", callback_data="publish:confirm")],
+            [InlineKeyboardButton(text="Опубликовать в выбранное", callback_data="publish:confirm")],
         ]
     )
     await call.message.answer("Выберите площадку для релиза (MVP: выбор одной площадки).", reply_markup=kb)
@@ -204,13 +204,13 @@ async def handle_edit_input(message: Message):
 
     state.edit_field = None
     state.content_preview = _build_draft_message(state)
-    await message.answer("✅ Обновлено. Актуальный черновик:")
+    await message.answer("Обновлено. Актуальный черновик:")
     await message.answer(state.content_preview, reply_markup=_build_edit_kb())
 
 
 @dp.message()
 async def fallback(message: Message):
-    await message.answer("Пришли видео 🎥")
+    await message.answer("Пришли видео")
 
 
 async def main():
