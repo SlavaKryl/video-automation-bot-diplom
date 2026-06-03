@@ -120,3 +120,27 @@ make odoo-up
 - `services/` — обработка медиа, транскрибация, генерация текстов.
 - `backend/` — API/healthcheck (точка для будущей интеграции с Odoo).
 
+
+## Локальная генерация изображения по смыслу
+
+После транскрибации бот:
+1. Выделяет главную мысль через локальную LLM (Ollama API).
+2. Отправляет в чат статус о старте генерации картинки.
+3. Генерирует изображение через локальный Stable Diffusion API (AUTOMATIC1111 compatible `/sdapi/v1/txt2img`).
+4. Если генерация не удалась, бот не прерывает сценарий и отправляет остальную информацию без картинки.
+
+Переменные окружения:
+
+```bash
+export OLLAMA_URL=http://localhost:11434
+export OLLAMA_MODEL=qwen2.5:3b
+
+export SD_API_URL=http://127.0.0.1:7860
+export SD_PROMPT_PREFIX="cinematic illustration, detailed,"
+export SD_NEGATIVE_PROMPT="lowres, blurry, watermark"
+export SD_STEPS=25
+export SD_WIDTH=768
+export SD_HEIGHT=768
+export SD_CFG_SCALE=7
+export SD_SAMPLER="Euler a"
+```

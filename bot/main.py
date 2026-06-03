@@ -4,7 +4,7 @@ import os
 from dataclasses import dataclass
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery, FSInputFile
 from aiogram.exceptions import TelegramBadRequest
 
 from backend.config import BOT_TOKEN
@@ -13,6 +13,7 @@ from bot.downloader import download_file
 from services.audio import extract_audio, trim_silence
 from services.content import build_content_pack
 from services.transcription import transcribe
+from services.visuals import extract_main_idea, generate_image_by_text
 
 logging.basicConfig(level=logging.INFO)
 
@@ -80,6 +81,10 @@ async def handle_video(message: Message):
 
     content_pack = await build_content_pack(text)
 
+    await message.answer("Выделяю главную мысль и запускаю генерацию изображения...")
+    main_idea = await extract_main_idea(text)
+    generated_image_path = await generate_image_by_text(main_idea)
+
     state = DraftState(
         transcription=text,
         content_preview="",
@@ -102,6 +107,13 @@ async def handle_video(message: Message):
     USER_DRAFTS[message.from_user.id] = state
 
     await message.answer(preview)
+    if generated_image_path:
+        await message.answer_photo(
+            photo=FSInputFile(generated_image_path),
+            caption=f"Сгенерированное изображение по главной мысли:\n{main_idea}",
+        )
+    else:
+        await message.answer("Не удалось сгенерировать изображение, отправляю результаты без картинки.")
     if job_id:
         await message.answer(f"Черновик синхронизирован с Odoo (video.job #{job_id}).")
     await message.answer(
